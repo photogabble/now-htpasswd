@@ -9,21 +9,18 @@ import (
 
 func Handler(w http.ResponseWriter, r *http.Request) {
 	// Build protected file path from http request
-	fp := filepath.Join("./protected", filepath.Clean(r.URL.Path))
+	fp := filepath.Join("protected", filepath.Clean(r.URL.Path))
 	if fp == "protected" {
 		fp = filepath.Join(fp, "index")
 	}
-	fp = fp + ".html"
-	
-	fmt.Fprintf(w, fp)
-	
-	return
-	
+	fp = "./" + fp + ".html"
+		
 	// Return a 404 if the protected file does not exist
 	info, err := os.Stat(fp)
 	if err != nil {
 		if os.IsNotExist(err) {
-			http.NotFound(w, r)
+			fmt.Fprintf(w, "Not found ", fp)
+			//http.NotFound(w, r)
 			return
 		}
 	}
