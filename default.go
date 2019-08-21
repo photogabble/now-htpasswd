@@ -10,8 +10,9 @@ import (
 )
 
 var auth *htpasswd.File
+var authLoadErr error
 
-func authenticate(w http.ResponseWriter, r *http.Request, user, pass []byte) bool {
+func authenticate(w http.ResponseWriter, r *http.Request) bool {
 	s := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 	if len(s) != 2 {
 		return false
@@ -38,7 +39,13 @@ func authenticate(w http.ResponseWriter, r *http.Request, user, pass []byte) boo
 
 func Handler(w http.ResponseWriter, r *http.Request) {	
 	// Load .htpasswd file
-	auth = htpasswd.New("./.htpasswd", htpasswd.DefaultSystems, nil)
+	auth, authLoadErr = htpasswd.New("./.htpasswd", htpasswd.DefaultSystems, nil)
+	
+	if authLoadErr != nil {
+		w.WriteHeader(500)
+        	w.Write([]byte("500 Internal Server Error\n"))
+		return
+	}
 	
 	// Build protected file path from http request
 	fp := filepath.Join("protected", filepath.Clean(r.URL.Path))
@@ -63,7 +70,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	// Check if user is authenticated
-	if authenticate(w,r,username,password) {
+	if authenticate(w,r) {
 		http.ServeFile(w,r,fp)
 		return
 	}
