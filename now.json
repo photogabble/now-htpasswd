@@ -1,5 +1,8 @@
 {
   "name": "now-htpasswd",
   "version": 2,
-  "builds": [{ "src": "default.go", "use": "@now/go" }]
+  "builds": [{ "src": "default.go", "use": "@now/go" }],
+  "routes": [
+    { "src": "/.*", "dest": "default.go"},
+  ]
 }
