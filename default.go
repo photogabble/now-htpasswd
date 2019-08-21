@@ -4,9 +4,33 @@ import (
 	"os"
 	"net/http"
 	"path/filepath"
+	"strings"
+	"encoding/base64"
 )
 
-func Handler(w http.ResponseWriter, r *http.Request) {
+var username = []byte("username")
+var password = []byte("password")
+
+func authenticate(w http.ResponseWriter, r *http.Request, user, pass []byte) {
+	s := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
+	if len(s) != 2 {
+		return false
+	}
+
+	b, err := base64.StdEncoding.DecodeString(s[1])
+	if err != nil {
+		return false
+	}
+	
+	pair := strings.SplitN(string(b), ":", 2)
+	if len(pair) != 2 {
+		return false
+	}
+
+	return pair[0] == string(user) && pair[1] == string(pass)
+}
+
+func Handler(w http.ResponseWriter, r *http.Request) {	
 	// Build protected file path from http request
 	fp := filepath.Join("protected", filepath.Clean(r.URL.Path))
 	if fp == "protected" {
@@ -29,5 +53,13 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	http.ServeFile(w,r,fp)
+	// Check if user is authenticated
+	if authenticate(w,r,username,password) {
+		http.ServeFile(w,r,fp)
+		return
+	}
+	
+	w.Header().Set("WWW-Authenticate", `Basic realm="Beware! Protected REALM! "`)
+        w.WriteHeader(401)
+        w.Write([]byte("401 Unauthorized\n"))
 }
