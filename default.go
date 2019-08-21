@@ -27,7 +27,13 @@ func authenticate(w http.ResponseWriter, r *http.Request, user, pass []byte) boo
 		return false
 	}
 
-	return pair[0] == string(user) && pair[1] == string(pass)
+	success := pair[0] == string(user) && pair[1] == string(pass)
+	
+	if success {
+		w.Header().Set("X-Authenticated-Username", string(user))
+	}
+	
+	return success
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {	
