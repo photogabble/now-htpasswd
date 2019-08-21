@@ -3,6 +3,6 @@
   "version": 2,
   "builds": [{ "src": "default.go", "use": "@now/go" }],
   "routes": [
-    { "src": "/.*", "dest": "default.go"},
+    { "src": "/.*", "dest": "default.go"}
   ]
 }
