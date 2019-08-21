@@ -1,7 +1,18 @@
 {
   "name": "now-htpasswd",
   "version": 2,
-  "builds": [{ "src": "default.go", "use": "@now/go" }],
+  "builds": [
+    { 
+      "src": "default.go",
+      "use": "@now/go",
+      "config": {
+       "includeFiles": [
+         "protected/**",
+         ".htpasswd"
+       ]
+      }
+    }
+  ],
   "routes": [
     { "src": "/.*", "dest": "default.go"}
   ]
