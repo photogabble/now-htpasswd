@@ -1,5 +1,5 @@
-<h1 align="center">now htpasswd</h1>
-<p align="center"><em>.htpasswd protection on zeit/now using Golang lambadas</em></p>
+<h1 align="center">ZEIT/Now .htpasswd Example</h1>
+<p align="center"><em>.htpasswd protection using a Golang serverless function</em></p>
 
 <p align="center">
   <a href="LICENSE"><img src="https://img.shields.io/github/license/photogabble/now-htpasswd.svg" alt="License"></a>
