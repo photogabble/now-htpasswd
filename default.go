@@ -6,10 +6,10 @@ import (
 	"path/filepath"
 	"strings"
 	"encoding/base64"
+	"github.com/tg123/go-htpasswd"
 )
 
-var username = []byte("username")
-var password = []byte("password")
+var auth *htpasswd.File
 
 func authenticate(w http.ResponseWriter, r *http.Request, user, pass []byte) bool {
 	s := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
@@ -26,17 +26,20 @@ func authenticate(w http.ResponseWriter, r *http.Request, user, pass []byte) boo
 	if len(pair) != 2 {
 		return false
 	}
-
-	success := pair[0] == string(user) && pair[1] == string(pass)
 	
-	if success {
-		w.Header().Set("X-Authenticated-Username", string(user))
+	ok := auth.Match(pair[0], pair[1])
+	
+	if ok {
+		w.Header().Set("X-Authenticated-Username", pair[0])
 	}
 	
-	return success
+	return ok
 }
 
 func Handler(w http.ResponseWriter, r *http.Request) {	
+	// Load .htpasswd file
+	auth = htpasswd.New("./.htpasswd", htpasswd.DefaultSystems, nil)
+	
 	// Build protected file path from http request
 	fp := filepath.Join("protected", filepath.Clean(r.URL.Path))
 	if fp == "protected" {
