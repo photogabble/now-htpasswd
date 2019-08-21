@@ -20,7 +20,7 @@ This works by utilising a catch all route that tells ZEIT Now to pipe all incomi
 
 ## Example
 
-I have this example live to test [here](). Use the username `test` with the password `pa$$word` to gain access.
+I have this example live to test [here](https://now-htpasswd.photogabble.now.sh). Use the username `test` with the password `pa$$word` to gain access.
 
 ## License
 
