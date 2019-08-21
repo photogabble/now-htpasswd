@@ -2,8 +2,6 @@ package handler
 
 import (
 	"os"
-	"io"
-	"strconv"
 	"net/http"
 	"path/filepath"
 )
@@ -31,33 +29,5 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	
-	// Open file for transmission
-	oFile, err := os.Open(fp)
-	defer oFile.Close()
-	
-	// If we can't open the file consider it not found
-	if err != nil {
-		http.NotFound(w, r)
-		return
-	}
-	
-	// Buffer for storing the file header
-	oFileHeader := make([]byte, 512)
-	// Copy 512 bytes into buffer
-	oFile.Read(oFileHeader)
-	// Analyse file header to obtain content type
-	oFileContentType := http.DetectContentType(oFileHeader)
-	// Get filesize as a string
-	oFileSize := strconv.FormatInt(info.Size(), 10)
-	
-	// Set Response Headers
-	w.Header().Set("Content-Type", oFileContentType)
-	w.Header().Set("Content-Length", oFileSize)
-	
-	// Set Response Body from file content
-	// Because we read the first 512 bytes into oFileHeader we need to reset
-	// the file pointer offset back to zero
-	oFile.Seek(0,0)
-	
-	io.Copy(w, oFile)
+	http.ServeFile(w,r,fp)
 }
