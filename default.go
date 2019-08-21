@@ -19,8 +19,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	info, err := os.Stat(fp)
 	if err != nil {
 		if os.IsNotExist(err) {
-			fmt.Fprintf(w, "Not found ", fp)
-			//http.NotFound(w, r)
+			http.NotFound(w, r)
 			return
 		}
 	}
