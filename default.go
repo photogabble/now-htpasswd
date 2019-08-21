@@ -3,12 +3,10 @@ package handler
 import (
 	"fmt"
 	"net/http"
-	"time"
+	"path/filepath"
 )
 
 func Handler(w http.ResponseWriter, r *http.Request) {
-	currentTime := time.Now().Format(time.RFC850)
-	
-	fmt.Fprintf(w, r.URL.Path)
-	fmt.Fprintf(w, currentTime)
+	fp := filepath.Join("protected", filepath.Clean(r.URL.Path))
+	fmt.Fprintf(w, fp)
 }
