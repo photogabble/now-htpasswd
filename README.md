@@ -12,7 +12,9 @@
 
 The creation of this project was prompted by [the above question](https://spectrum.chat/zeit/general/is-it-possible-to-secure-a-domain-with-htpasswd-on-my-zeit-co-website~738b8d15-f90c-40ce-bbc0-6c682aff9580) by Yannick Wittwer on the Zeir Spectrum chat. Initially I didn't think it was possible but upon further reflection and a number of failed tests I got this working example completed.
 
-This is a basic example and has potential for expansion; I have released it under the [MIT](LICENSE) and look forward to seeing if and how it gets used.
+As of writing there is an [open PR](https://github.com/zeit/schemas/pull/54) written on 10th July 2019 that aims to add auth config options in the ZEIT Now static config. If that gets merged in then it may make solutions such as this obsolete (more so than .htpasswd is already.)
+
+This is a basic example and has potential for expansion; I have released it under the [MIT License](LICENSE) and look forward to seeing if and how it gets used.
 
 ## How it works
 
@@ -21,6 +23,10 @@ This works by utilising a catch all route that tells ZEIT Now to pipe all incomi
 ## Example
 
 I have this example live to test [here](https://now-htpasswd.photogabble.now.sh). Use the username `test` with the password `pa$$word` to gain access.
+
+## Not Invented Here
+
+[flawyte/now-basic-auth](https://github.com/flawyte/now-basic-auth) beat me to the punch with their Node based implemention of _Basic Authentication_. They don't support loading the user credentials from a .htpasswd file but have otherwise solved the problem in the same way I did.
 
 ## License
 
