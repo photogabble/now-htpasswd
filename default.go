@@ -33,7 +33,7 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 	}
 	
 	// Open file for transmission
-	oFile, err := os.Open(Filename)
+	oFile, err := os.Open(fp)
 	defer oFile.Close()
 	
 	// If we can't open the file consider it not found
