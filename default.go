@@ -11,7 +11,7 @@ import (
 var username = []byte("username")
 var password = []byte("password")
 
-func authenticate(w http.ResponseWriter, r *http.Request, user, pass []byte) {
+func authenticate(w http.ResponseWriter, r *http.Request, user, pass []byte) bool {
 	s := strings.SplitN(r.Header.Get("Authorization"), " ", 2)
 	if len(s) != 2 {
 		return false
