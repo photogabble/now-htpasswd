@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"os"
 	"net/http"
 	"path/filepath"
 )
@@ -21,6 +22,12 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 			http.NotFound(w, r)
 			return
 		}
+	}
+	
+	// Return a 404 if the request is for a directory
+	if info.IsDir() {
+		http.NotFound(w, r)
+		return
 	}
 	
 	fmt.Fprintf(w, fp)
